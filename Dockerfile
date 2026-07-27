@@ -26,11 +26,10 @@ RUN mkdir -p data/images data/generated logs
 ENV PYTHONUNBUFFERED=1
 
 # Copy startup script
-COPY start.sh /app/start.sh
-RUN chmod +x /app/start.sh
+COPY start.py /app/start.py
 
 # Expose port for API
 EXPOSE 8000
 
-# Start FastAPI server using startup script
-CMD ["/app/start.sh"]
+# Start FastAPI server using Python startup script
+CMD ["python", "/app/start.py"]
