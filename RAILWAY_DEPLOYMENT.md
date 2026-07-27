@@ -65,7 +65,8 @@ The following files configure Railway deployment:
 
 ### Procfile
 ```
-web: uvicorn api.main:app --host 0.0.0.0 --port $PORT
+web: python start.py
+
 ```
 
 ### runtime.txt
