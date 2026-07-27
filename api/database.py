@@ -4,12 +4,19 @@ from databases import Database
 from sqlalchemy import MetaData, Table, Column, String, Integer, DateTime, JSON, Boolean
 from datetime import datetime
 
-# Database URL (SQLite for development, PostgreSQL for production)
-DATABASE_URL = "sqlite:///./data/app.db"
-# For production: DATABASE_URL = "postgresql://user:password@localhost/dbname"
+import os
+
+# Ensure data directory exists
+os.makedirs("./data", exist_ok=True)
+
+# Database URL (SQLite for development, PostgreSQL/Environment for production)
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./data/app.db")
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 database = Database(DATABASE_URL)
 metadata = MetaData()
+
 
 # Users table
 users_table = Table(
@@ -58,7 +65,7 @@ sessions_table = Table(
 )
 
 # Create tables
-engine = sqlalchemy.create_engine(
-    DATABASE_URL, connect_args={"check_same_thread": False}
-)
+connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+engine = sqlalchemy.create_engine(DATABASE_URL, connect_args=connect_args)
 metadata.create_all(engine)
+

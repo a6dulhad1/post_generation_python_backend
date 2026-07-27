@@ -10,7 +10,13 @@ try:
 except ValueError:
     port = "8000"
 
+# Ensure required directories exist
+os.makedirs("data/images", exist_ok=True)
+os.makedirs("data/generated", exist_ok=True)
+os.makedirs("logs", exist_ok=True)
+
 print(f"Starting FastAPI server on port {port}")
+
 
 # Run uvicorn
 os.execvp("python", [
