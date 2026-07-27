@@ -24,10 +24,13 @@ RUN mkdir -p data/images data/generated logs
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
-ENV PORT=8000
+
+# Copy startup script
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
 
 # Expose port for API
-EXPOSE ${PORT}
+EXPOSE 8000
 
-# Start FastAPI server (use shell form to expand $PORT variable)
-CMD python -m uvicorn api.main:app --host 0.0.0.0 --port ${PORT}
+# Start FastAPI server using startup script
+CMD ["/app/start.sh"]
